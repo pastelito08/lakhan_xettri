@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lakhan Madai — Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--bg2:#0f0f0f;--bg3:#161616;--bg4:#1c1c1c;
+  --border:#222;--border2:#2e2e2e;--border3:#3a3a3a;
+  --text:#f0f0f0;--text2:#8a8a8a;--text3:#4a4a4a;
+  --green:#00d4aa;--blue:#3b82f6;--purple:#a855f7;--orange:#f59e0b;
+  --font:'Space Grotesk',sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:99px}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(8,8,8,0.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:58px;padding:0 clamp(1rem,4vw,3rem);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-family:var(--mono);font-size:13px;color:var(--green);letter-spacing:0.08em;display:flex;align-items:center;gap:8px}
+.nav-logo-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{font-size:12px;color:var(--text2);letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--green)}
+.nav-cta{font-size:12px;padding:6px 14px;border:1px solid var(--green);border-radius:6px;color:var(--green);transition:all 0.2s;font-family:var(--mono)}
+.nav-cta:hover{background:var(--green);color:#000}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 380px;
+  gap:4rem;align-items:center;
+  max-width:1100px;margin:0 auto;
+  padding:100px clamp(1rem,4vw,3rem) 60px;
+}
+.hero-left{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;color:var(--green);
+  letter-spacing:0.15em;text-transform:uppercase;
+  background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.15);
+  padding:5px 12px;border-radius:99px;margin-bottom:1.75rem;
+}
+.hero-eyebrow-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.hero-name{
+  font-size:clamp(48px,7vw,82px);font-weight:800;
+  line-height:0.95;letter-spacing:-0.04em;
+  margin-bottom:1.25rem;
+}
+.hero-name-first{color:var(--text)}
+.hero-name-last{
+  background:linear-gradient(135deg,var(--green) 0%,var(--blue) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-role{
+  font-family:var(--mono);font-size:13px;color:var(--text2);
+  margin-bottom:1.5rem;letter-spacing:0.04em;
+  display:flex;align-items:center;gap:8px;
+}
+.hero-role::before{content:'>';color:var(--green)}
+.hero-desc{font-size:16px;color:var(--text2);line-height:1.85;max-width:500px;margin-bottom:2.25rem}
+.hero-desc strong{color:var(--text);font-weight:500}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:3rem}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;font-size:13px;font-weight:600;
+  border-radius:8px;transition:all 0.2s;cursor:pointer;
+  font-family:var(--font);letter-spacing:0.02em;border:none;
+}
+.btn-green{background:var(--green);color:#000}
+.btn-green:hover{background:#00f0c0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,170,0.25)}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-outline:hover{border-color:var(--text2);color:var(--text);transform:translateY(-1px)}
+.hero-stats{display:flex;gap:2.5rem}
+.stat{}
+.stat-n{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--green);display:block;line-height:1}
+.stat-l{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;display:block}
+
+/* HERO PHOTO CARD */
+.hero-right{position:relative}
+.photo-card{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:20px;overflow:hidden;position:relative;
+}
+.photo-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top}
+.photo-card-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(8,8,8,0.95) 0%,transparent 100%);
+  padding:1.75rem 1.5rem 1.5rem;
+}
+.photo-card-name{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
+.photo-card-role{font-size:12px;color:var(--text2);margin-top:4px;font-family:var(--mono)}
+.photo-card-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.photo-badge{
+  font-family:var(--mono);font-size:10px;padding:4px 10px;
+  border-radius:99px;border:1px solid;letter-spacing:0.05em;
+}
+.pb-green{background:rgba(0,212,170,0.1);border-color:rgba(0,212,170,0.25);color:var(--green)}
+.pb-blue{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.25);color:var(--blue)}
+.pb-purple{background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.25);color:var(--purple)}
+.status-badge{
+  position:absolute;top:14px;right:14px;
+  background:rgba(8,8,8,0.85);backdrop-filter:blur(8px);
+  border:1px solid var(--border2);border-radius:99px;
+  padding:5px 12px;font-size:11px;color:var(--green);
+  font-family:var(--mono);letter-spacing:0.05em;
+  display:flex;align-items:center;gap:6px;
+}
+.status-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.floating-card{
+  position:absolute;left:-20px;top:50%;transform:translateY(-50%);
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:12px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.fc-icon{font-size:20px}
+.fc-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block}
+.fc-value{font-size:13px;font-weight:600;color:var(--text);font-family:var(--mono)}
+
+/* SECTION BASE */
+.sec{padding:90px clamp(1rem,4vw,3rem);max-width:1100px;margin:0 auto}
+.sec-tag{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.2em;text-transform:uppercase;display:block;margin-bottom:6px}
+.sec-title{font-size:clamp(26px,4vw,36px);font-weight:700;letter-spacing:-0.025em;color:var(--text)}
+.sec-line{width:40px;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));margin:14px 0 40px;border-radius:99px}
+
+/* ABOUT */
+.about-layout{display:grid;grid-template-columns:1.3fr 1fr;gap:4rem;align-items:start}
+.about-text p{color:var(--text2);line-height:1.9;font-size:15px;margin-bottom:1rem}
+.about-text p strong{color:var(--text);font-weight:500}
+.about-text p em{color:var(--green);font-style:normal}
+.about-cards{display:flex;flex-direction:column;gap:10px}
+.acard{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+  transition:border-color 0.2s;
+}
+.acard:hover{border-color:var(--border3)}
+.acard-icon{font-size:22px;flex-shrink:0}
+.acard-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block}
+.acard-value{font-size:13px;font-weight:600;color:var(--text);margin-top:2px}
+.acard-sub{font-size:11px;color:var(--text2);margin-top:1px}
+
+/* SKILLS */
+.skills-layout{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.scard{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:20px;transition:border-color 0.2s,transform 0.2s;
+}
+.scard:hover{border-color:var(--border3);transform:translateY(-2px)}
+.scard-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.scard-emoji{font-size:22px}
+.scard-title{font-size:14px;font-weight:600;color:var(--text)}
+.stags{display:flex;flex-wrap:wrap;gap:6px}
+.stag{
+  font-family:var(--mono);font-size:11px;padding:4px 9px;
+  border-radius:5px;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);transition:all 0.2s;cursor:default;
+}
+.stag:hover{border-color:var(--green);color:var(--green)}
+
+/* PROJECTS */
+.pcard{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;
+  transition:border-color 0.2s,transform 0.2s;
+  margin-bottom:16px;
+}
+.pcard:hover{border-color:var(--border3);transform:translateY(-2px)}
+.pcard.main{border-color:rgba(0,212,170,0.2)}
+.pcard-top{
+  padding:24px 24px 0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+}
+.pcard-title{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.pcard-desc{font-size:14px;color:var(--text2);line-height:1.75;padding:0 24px;margin-top:10px}
+.pcard-tech{display:flex;flex-wrap:wrap;gap:6px;padding:16px 24px 0}
+.ptag{
+  font-family:var(--mono);font-size:10px;padding:3px 9px;
+  border-radius:4px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);
+}
+.pcard-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px 20px;margin-top:8px;
+  border-top:1px solid var(--border);
+}
+.pcard-links{display:flex;gap:1rem}
+.plink{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;color:var(--text2);
+  padding:7px 14px;border-radius:7px;border:1px solid var(--border2);
+  transition:all 0.2s;font-family:var(--mono);letter-spacing:0.03em;
+}
+.plink:hover{border-color:var(--green);color:var(--green);background:rgba(0,212,170,0.05)}
+.plink.main-link{background:var(--green);color:#000;border-color:var(--green)}
+.plink.main-link:hover{background:#00f0c0;border-color:#00f0c0}
+.pbadge{
+  font-family:var(--mono);font-size:10px;padding:4px 10px;
+  border-radius:99px;background:rgba(0,212,170,0.08);
+  border:1px solid rgba(0,212,170,0.2);color:var(--green);
+  letter-spacing:0.08em;white-space:nowrap;
+}
+.pcard-accent{height:2px;background:linear-gradient(90deg,var(--green),var(--blue))}
+
+/* CONTACT */
+.contact-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start}
+.contact-left p{color:var(--text2);line-height:1.85;font-size:15px;margin-bottom:2rem}
+.clinks{display:flex;flex-direction:column;gap:8px}
+.clink{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;
+  font-size:14px;color:var(--text2);transition:all 0.2s;
+}
+.clink:hover{border-color:var(--green);color:var(--green);transform:translateX(4px)}
+.clink-em{font-size:18px;width:24px;text-align:center;flex-shrink:0}
+
+.cform{display:flex;flex-direction:column;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;font-family:var(--mono)}
+.fg input,.fg textarea{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;padding:11px 14px;
+  color:var(--text);font-family:var(--font);font-size:14px;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;resize:vertical;
+}
+.fg input:focus,.fg textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,212,170,0.08)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--text3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#success-msg{
+  display:none;background:rgba(0,212,170,0.07);
+  border:1px solid rgba(0,212,170,0.2);border-radius:8px;
+  padding:12px 16px;color:var(--green);font-size:13px;text-align:center;
+}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:28px clamp(1rem,4vw,3rem);
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1100px;margin:0 auto;
+}
+.footer-left{font-family:var(--mono);font-size:12px;color:var(--text3)}
+.footer-left span{color:var(--green)}
+.footer-right{display:flex;gap:1rem}
+.foot-link{font-size:12px;color:var(--text3);transition:color 0.2s}
+.foot-link:hover{color:var(--green)}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease}
+.fi.v{opacity:1;transform:translateY(0)}
+
+@media(max-width:800px){
+  #hero{grid-template-columns:1fr;padding-top:90px}
+  .hero-right{display:none}
+  .about-layout,.contact-layout,.skills-layout{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  nav{padding:0 1rem}
+  .nav-links{gap:1rem}
+  footer{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    LM.dev
+  </div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+    <a href="mailto:pastelito2062@gmail.com" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Available for work
+    </div>
+    <h1 class="hero-name">
+      <div class="hero-name-first">Lakhan</div>
+      <div class="hero-name-last">Madai.</div>
+    </h1>
+    <div class="hero-role">Backend Developer &amp; ECE Student, Nepal</div>
+    <p class="hero-desc">
+      4th year <strong>Electronics &amp; Communication Engineering</strong> student at Purwanchal Campus, Nepal. I build <strong>scalable backend systems</strong> and full-stack apps with Python, FastAPI, Django &amp; React — then deploy them to the cloud. 🚀
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-green">🚀 View Projects</a>
+      <a href="#contact" class="btn btn-outline">📬 Contact Me</a>
+      <a href="https://github.com/pastelito08" target="_blank" class="btn btn-outline">💻 GitHub</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">4th</span><span class="stat-l">Year ECE</span></div>
+      <div class="stat"><span class="stat-n">5+</span><span class="stat-l">Projects</span></div>
+      <div class="stat"><span class="stat-n">3</span><span class="stat-l">Live Apps</span></div>
+      <div class="stat"><span class="stat-n">2+</span><span class="stat-l">Yrs Coding</span></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="photo-card">
+      <div class="status-badge"><span class="status-dot"></span>Open to Work</div>
+      <img src="https://avatars.githubusercontent.com/u/282909971?s=400&u=9ff30851765793d583bc632aa46c44c5a9d395f2&v=4" alt="Lakhan Madai" class="photo-card-img" />
+      <div class="photo-card-overlay">
+        <div class="photo-card-name">Lakhan Madai</div>
+        <div class="photo-card-role">// Backend Developer</div>
+        <div class="photo-card-badges">
+          <span class="photo-badge pb-green">Python</span>
+          <span class="photo-badge pb-blue">FastAPI</span>
+          <span class="photo-badge pb-purple">Django</span>
+        </div>
+      </div>
+    </div>
+    <div class="floating-card">
+      <span class="fc-icon">🎓</span>
+      <div>
+        <span class="fc-label">Currently</span>
+        <span class="fc-value">Purwanchal Campus</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec fi" id="about">
+  <span class="sec-tag">01 — About Me</span>
+  <h2 class="sec-title">Who I Am 👨‍💻</h2>
+  <div class="sec-line"></div>
+  <div class="about-layout">
+    <div class="about-text">
+      <p>Hey! I'm <strong>Lakhan Madai</strong>, a passionate backend developer currently in my <em>4th year of Electronics and Communication Information Engineering</em> at <strong>Purwanchal Campus, Nepal</strong>. 🎓</p>
+      <p>I love building things that work in the real world. My journey started with <strong>HTML &amp; CSS</strong>, and evolved into building complete full-stack applications. I specialize in <strong>Python backend development</strong> with FastAPI and Django.</p>
+      <p>Recently I built and deployed a complete <strong>Social Networking Platform</strong> — from JWT auth and RESTful APIs to React frontend and cloud deployment on Render + Vercel + Supabase. 🌐</p>
+      <p>I care about clean code, proper documentation, security best practices, and shipping things that actually work in production. 💡</p>
+    </div>
+    <div class="about-cards">
+      <div class="acard">
+        <span class="acard-icon">🎓</span>
+        <div>
+          <span class="acard-label">Education</span>
+          <div class="acard-value">Electronics &amp; Communication Eng.</div>
+          <div class="acard-sub">Purwanchal Campus, Nepal — 4th Year</div>
+        </div>
+      </div>
+      <div class="acard">
+        <span class="acard-icon">📍</span>
+        <div>
+          <span class="acard-label">Location</span>
+          <div class="acard-value">Kathmandu, Nepal 🇳🇵</div>
+        </div>
+      </div>
+      <div class="acard">
+        <span class="acard-icon">🐍</span>
+        <div>
+          <span class="acard-label">Primary Stack</span>
+          <div class="acard-value">Python · FastAPI · Django</div>
+        </div>
+      </div>
+      <div class="acard">
+        <span class="acard-icon">☁️</span>
+        <div>
+          <span class="acard-label">Cloud &amp; Deployment</span>
+          <div class="acard-value">Render · Vercel · Supabase</div>
+        </div>
+      </div>
+      <div class="acard">
+        <span class="acard-icon">📧</span>
+        <div>
+          <span class="acard-label">Email</span>
+          <div class="acard-value">pastelito2062@gmail.com</div>
+        </div>
+      </div>
+      <div class="acard">
+        <span class="acard-icon">📱</span>
+        <div>
+          <span class="acard-label">Phone</span>
+          <div class="acard-value">+977 9769900375</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="sec fi" id="skills">
+  <span class="sec-tag">02 — Skills</span>
+  <h2 class="sec-title">Tech Stack 🛠️</h2>
+  <div class="sec-line"></div>
+  <div class="skills-layout">
+    <div class="scard">
+      <div class="scard-head"><span class="scard-emoji">🐍</span><span class="scard-title">Python Backend</span></div>
+      <div class="stags">
+        <span class="stag">Python</span><span class="stag">FastAPI</span><span class="stag">Django</span>
+        <span class="stag">DRF</span><span class="stag">Pydantic</span><span class="stag">JWT Auth</span>
+        <span class="stag">SQLAlchemy</span><span class="stag">Alembic</span>
+      </div>
+    </div>
+    <div class="scard">
+      <div class="scard-head"><span class="scard-emoji">⚛️</span><span class="scard-title">Frontend</span></div>
+      <div class="stags">
+        <span class="stag">React.js</span><span class="stag">HTML5</span><span class="stag">CSS3</span>
+        <span class="stag">Tailwind CSS</span><span class="stag">JavaScript</span>
+        <span class="stag">React Hook Form</span><span class="stag">Axios</span>
+      </div>
+    </div>
+    <div class="scard">
+      <div class="scard-head"><span class="scard-emoji">🗄️</span><span class="scard-title">Databases</span></div>
+      <div class="stags">
+        <span class="stag">PostgreSQL</span><span class="stag">SQLite</span>
+        <span class="stag">Supabase</span><span class="stag">SQLAlchemy ORM</span><span class="stag">Alembic</span>
+      </div>
+    </div>
+    <div class="scard">
+      <div class="scard-head"><span class="scard-emoji">🚀</span><span class="scard-title">Tools &amp; DevOps</span></div>
+      <div class="stags">
+        <span class="stag">Git</span><span class="stag">GitHub</span><span class="stag">Render</span>
+        <span class="stag">Vercel</span><span class="stag">REST APIs</span>
+        <span class="stag">Swagger / OpenAPI</span><span class="stag">Postman</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="sec fi" id="projects">
+  <span class="sec-tag">03 — Projects</span>
+  <h2 class="sec-title">What I've Built 🏗️</h2>
+  <div class="sec-line"></div>
+
+  <!-- SocialNet FEATURED -->
+  <div class="pcard main">
+    <div class="pcard-accent"></div>
+    <div class="pcard-top">
+      <div>
+        <div class="pcard-title">🌐 SocialNet — Full Stack Social Platform</div>
+      </div>
+      <span class="pbadge">⭐ Featured</span>
+    </div>
+    <div class="pcard-desc">
+      A complete social networking platform built entirely from scratch. Features JWT authentication, post CRUD with pagination and search, comments with threaded replies, likes system, user profiles, and role-based access. Fully deployed — backend on Render, frontend on Vercel, PostgreSQL on Supabase.
+    </div>
+    <div class="pcard-tech">
+      <span class="ptag">FastAPI</span><span class="ptag">PostgreSQL</span><span class="ptag">SQLAlchemy</span>
+      <span class="ptag">React.js</span><span class="ptag">Tailwind CSS</span><span class="ptag">JWT</span>
+      <span class="ptag">Supabase</span><span class="ptag">Render</span><span class="ptag">Vercel</span><span class="ptag">Alembic</span>
+    </div>
+    <div class="pcard-footer">
+      <div class="pcard-links">
+        <a href="https://social-frontend-puce.vercel.app" target="_blank" class="plink main-link">🌍 Live Frontend</a>
+        <a href="https://socialnet-backend1.onrender.com" target="_blank" class="plink">⚙️ Live Backend</a>
+        <a href="https://socialnet-backend1.onrender.com/docs" target="_blank" class="plink">📄 API Docs</a>
+        <a href="https://github.com/pastelito08/project" target="_blank" class="plink">💻 GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant -->
+  <div class="pcard">
+    <div class="pcard-top">
+      <div><div class="pcard-title">🍽️ Restaurant Management System</div></div>
+    </div>
+    <div class="pcard-desc">A Django-based restaurant management system with menu management, order tracking, and admin dashboard. Built with Django REST Framework and PostgreSQL backend.</div>
+    <div class="pcard-tech">
+      <span class="ptag">Django</span><span class="ptag">DRF</span><span class="ptag">PostgreSQL</span><span class="ptag">Python</span><span class="ptag">REST API</span>
+    </div>
+    <div class="pcard-footer">
+      <div class="pcard-links">
+        <a href="https://github.com/pastelito08" target="_blank" class="plink">💻 GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Task -->
+  <div class="pcard">
+    <div class="pcard-top">
+      <div><div class="pcard-title">🔌 RESTful API Project</div></div>
+    </div>
+    <div class="pcard-desc">A RESTful API built with FastAPI featuring full CRUD operations, Pydantic data validation, automated Swagger/OpenAPI documentation, and JWT authentication.</div>
+    <div class="pcard-tech">
+      <span class="ptag">FastAPI</span><span class="ptag">Pydantic</span><span class="ptag">Python</span><span class="ptag">Swagger</span><span class="ptag">JWT</span>
+    </div>
+    <div class="pcard-footer">
+      <div class="pcard-links">
+        <a href="https://github.com/pastelito08" target="_blank" class="plink">💻 GitHub</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+<section class="sec fi" id="contact">
+  <span class="sec-tag">04 — Contact</span>
+  <h2 class="sec-title">Get In Touch 📬</h2>
+  <div class="sec-line"></div>
+  <div class="contact-layout">
+    <div class="contact-left">
+      <p>I'm open to new opportunities, collaborations, and interesting projects. Whether you have a project in mind, want to collaborate, or just want to say hi — my inbox is always open! 😊</p>
+      <div class="clinks">
+        <a href="mailto:pastelito2062@gmail.com" class="clink"><span class="clink-em">📧</span>pastelito2062@gmail.com</a>
+        <a href="tel:+9779769900375" class="clink"><span class="clink-em">📱</span>+977 9769900375</a>
+        <a href="https://github.com/pastelito08" target="_blank" class="clink"><span class="clink-em">💻</span>github.com/pastelito08</a>
+        <div class="clink"><span class="clink-em">📍</span>Kathmandu, Nepal 🇳🇵</div>
+        <div class="clink"><span class="clink-em">🎓</span>Purwanchal Campus, Nepal</div>
+      </div>
+    </div>
+    <div class="cform">
+      <div class="form-row">
+        <div class="fg"><label>Name</label><input type="text" id="fn" placeholder="Your name" /></div>
+        <div class="fg"><label>Email</label><input type="email" id="fe" placeholder="your@email.com" /></div>
+      </div>
+      <div class="fg"><label>Subject</label><input type="text" id="fs" placeholder="Project Collaboration" /></div>
+      <div class="fg"><label>Message</label><textarea rows="5" id="fm" placeholder="Tell me about your project or just say hi! 👋"></textarea></div>
+      <button class="btn btn-green" onclick="sendMsg()" style="align-self:flex-start">📨 Send Message</button>
+      <div id="success-msg">✅ Opening your email app... Thanks for reaching out! 🙏</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">Built with ❤️ by <span>Lakhan Madai</span> · Purwanchal Campus, Nepal · 2026</div>
+  <div class="footer-right">
+    <a href="https://github.com/pastelito08" target="_blank" class="foot-link">GitHub</a>
+    <a href="mailto:pastelito2062@gmail.com" class="foot-link">Email</a>
+    <a href="https://social-frontend-puce.vercel.app" target="_blank" class="foot-link">SocialNet</a>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('v')})},{threshold:0.08});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+function sendMsg(){
+  const n=document.getElementById('fn').value.trim();
+  const e=document.getElementById('fe').value.trim();
+  const s=document.getElementById('fs').value.trim();
+  const m=document.getElementById('fm').value.trim();
+  if(!n||!e||!m){alert('Please fill in Name, Email and Message! 😊');return;}
+  const body=`Name: ${n}\nEmail: ${e}\n\nMessage:\n${m}`;
+  window.location.href=`mailto:pastelito2062@gmail.com?subject=${encodeURIComponent(s||'Portfolio Contact — '+n)}&body=${encodeURIComponent(body)}`;
+  document.getElementById('success-msg').style.display='block';
+  ['fn','fe','fs','fm'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
+</body>
+</html>
