@@ -551,7 +551,10 @@ footer{
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
+emailjs.init("prKvbAReDYjMHSO_6");
+
 const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('v')})},{threshold:0.08});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
 
@@ -568,10 +571,27 @@ function sendMsg(){
   const s=document.getElementById('fs').value.trim();
   const m=document.getElementById('fm').value.trim();
   if(!n||!e||!m){alert('Please fill in Name, Email and Message! 😊');return;}
-  const body=`Name: ${n}\nEmail: ${e}\n\nMessage:\n${m}`;
-  window.location.href=`mailto:pastelito2062@gmail.com?subject=${encodeURIComponent(s||'Portfolio Contact — '+n)}&body=${encodeURIComponent(body)}`;
-  document.getElementById('success-msg').style.display='block';
-  ['fn','fe','fs','fm'].forEach(id=>document.getElementById(id).value='');
+  
+  const btn = document.querySelector('.cform .btn-green');
+  btn.textContent = '⏳ Sending...';
+  btn.disabled = true;
+
+  emailjs.send("service_2s99kyr", "template_b7kjgxw", {
+    name: n,
+    email: e,
+    subject: s || 'Portfolio Contact',
+    message: m
+  }).then(() => {
+    document.getElementById('success-msg').style.display='block';
+    ['fn','fe','fs','fm'].forEach(id=>document.getElementById(id).value='');
+    btn.textContent = '📨 Send Message';
+    btn.disabled = false;
+  }).catch((err) => {
+    alert('Failed to send message. Please email me directly at pastelito2062@gmail.com');
+    btn.textContent = '📨 Send Message';
+    btn.disabled = false;
+    console.error(err);
+  });
 }
 </script>
 </body>
